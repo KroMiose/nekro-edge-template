@@ -62,16 +62,15 @@ app.get("*", async (c) => {
   // Production SSR
   try {
     // This is a dynamic import, so it will only be executed in production.
-    // By using `?raw`, we instruct the bundler to inline the manifest content at build time.
+    // The bundler automatically parses the JSON file, so we can use the default export directly.
     // @ts-ignore
-    const { default: manifestRaw } = await import("../frontend/dist/.vite/manifest.json?raw");
-    const manifest = JSON.parse(manifestRaw);
+    const { default: manifest } = await import("../frontend/dist/.vite/manifest.json?raw");
 
     // @ts-ignore
     const { render } = await import("../frontend/dist/server/entry-server.js");
 
     const rendered = await render({ url: c.req.url });
-    const entry = manifest["frontend/src/entry-client.tsx"];
+    const entry = (manifest as unknown as Record<string, any>)["frontend/src/entry-client.tsx"];
 
     if (!entry) {
       throw new Error("Could not find frontend entry in manifest.json");
