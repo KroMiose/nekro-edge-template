@@ -16,13 +16,13 @@
     }
   ],
   "vars": {
-    "NODE_ENV": "development",
-    "VITE_PORT": "5173"
+    "NODE_ENV": "production"
   },
   "env": {
-    "production": {
+    "development": {
       "vars": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "development",
+        "VITE_PORT": "5173"
       }
     }
   }
