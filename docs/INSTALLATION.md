@@ -20,28 +20,52 @@
 
 ### 1. 获取项目
 
-#### 方式一：克隆模板 (推荐新手)
+#### 方式一：使用 GitHub 模板 (🌟 强烈推荐)
+
+1. 访问 [NekroEdge 模板页面](https://github.com/KroMiose/nekro-edge-template)
+2. 点击绿色的 **"Use this template"** 按钮
+3. 选择 **"Create a new repository"**
+4. 填写你的仓库名称和描述
+5. 选择仓库可见性（公开/私有）
+6. 点击 **"Create repository"**
 
 ```bash
-# 克隆模板到本地
-git clone https://github.com/KroMiose/nekro-edge-template.git your-project-name
+# 克隆你新创建的仓库
+git clone https://github.com/YOUR_USERNAME/your-project-name.git
 cd your-project-name
-
-# 移除原始 git 历史，开始全新项目
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
 ```
 
-#### 方式二：Fork 仓库 (推荐有经验开发者)
+> 💡 **为什么推荐这种方式？**
+>
+> - 自动创建独立的 Git 历史
+> - 保持与原模板的松耦合关系
+> - 方便后续获取模板更新
+> - 符合 GitHub 的最佳实践
 
-1. 在 GitHub 上 Fork [nekro-edge-template](https://github.com/KroMiose/nekro-edge-template)
+#### 方式二：Fork 仓库 (适合贡献代码)
+
+如果你计划向原模板贡献代码，可以选择 Fork：
+
+1. 在 [GitHub 模板页面](https://github.com/KroMiose/nekro-edge-template) 点击 **"Fork"**
 2. 克隆你的 Fork
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/nekro-edge-template.git your-project-name
 cd your-project-name
+```
+
+#### 方式三：直接克隆 (仅用于快速测试)
+
+```bash
+# 仅用于快速测试，不推荐用于正式项目
+git clone https://github.com/KroMiose/nekro-edge-template.git your-project-name
+cd your-project-name
+
+# 如需创建新的 Git 历史
+rm -rf .git
+git init
+git add .
+git commit -m "Initial commit"
 ```
 
 ### 2. 安装依赖

@@ -183,21 +183,39 @@ export default function AboutPage() {
 }
 ```
 
-#### 添加路由
+#### 添加路由 (统一配置)
+
+现在只需要在一个地方添加路由：
 
 ```typescript
-// frontend/src/App.tsx
+// frontend/src/routes.tsx
 import AboutPage from './pages/AboutPage';
 
-// 在 App 组件中添加路由
-<Route path="/about" element={<AboutPage />} />
+export const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<App />}>
+      <Route index element={<HomePage />} />
+      <Route path="features" element={<Features />} />
+      <Route path="about" element={<AboutPage />} />  {/* 在这里添加新路由 */}
+    </Route>
+  </Routes>
+);
 ```
 
 #### 更新导航
 
 ```typescript
 // frontend/src/App.tsx
-<Button color="inherit" component={Link} to="/about">
+<Button
+  component={RouterLink}
+  to="/about"
+  sx={{
+    my: 2,
+    color: "inherit",
+    display: "block",
+    fontWeight: location.pathname === "/about" ? "bold" : "normal",
+  }}
+>
   关于我们
 </Button>
 ```
