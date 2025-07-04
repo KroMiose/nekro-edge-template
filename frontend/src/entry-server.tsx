@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import { StaticRouter as OriginalStaticRouter } from "react-router-dom/server";
-import { Routes as OriginalRoutes, Route as OriginalRoute } from "react-router-dom";
+import { StaticRouter as OriginalStaticRouter, Routes as OriginalRoutes, Route as OriginalRoute } from "react-router";
 import App from "./App";
 import { Features } from "./pages/Features";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

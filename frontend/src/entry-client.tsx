@@ -1,11 +1,7 @@
 import "vite/modulepreload-polyfill";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  BrowserRouter as OriginalBrowserRouter,
-  Routes as OriginalRoutes,
-  Route as OriginalRoute,
-} from "react-router-dom";
+import { BrowserRouter as OriginalBrowserRouter, Routes as OriginalRoutes, Route as OriginalRoute } from "react-router";
 import App from "./App";
 import "uno.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
