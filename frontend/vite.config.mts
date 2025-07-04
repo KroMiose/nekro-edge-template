@@ -22,7 +22,8 @@ export default defineConfig({
     },
   },
   build: {
-    manifest: true,
     outDir: "dist",
+    manifest: true,
+    ssr: "src/entry-server.tsx",
   },
 });
