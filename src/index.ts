@@ -102,9 +102,21 @@ app.get("*", async (c) => {
   } catch (e) {
     console.error("SSR failed:", e);
     // Fallback to a simple error page if SSR fails.
-    const errorMessage = e instanceof Error ? `${e.message}\n${e.stack}` : String(e);
+    let detailedError = "An unknown error occurred.";
+    if (e instanceof Error) {
+      detailedError = `Error: ${e.message}\n\nStack Trace:\n${e.stack}\n`;
+      try {
+        const serializedError = JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
+        detailedError += `\nFull Error Object:\n${serializedError}`;
+      } catch (jsonError) {
+        detailedError += "\nCould not serialize the full error object.";
+      }
+    } else {
+      detailedError = `An non-error was thrown: ${String(e)}`;
+    }
+
     return c.html(
-      `<!DOCTYPE html><html><head><title>Render Error</title></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p><hr><pre>${errorMessage}</pre></body></html>`,
+      `<!DOCTYPE html><html><head><title>Render Error</title></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p><hr><pre>${detailedError}</pre></body></html>`,
       500,
     );
   }
