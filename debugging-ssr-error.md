@@ -80,15 +80,22 @@
 - **原因:** 这是对我之前所有关于路径的错误认知进行的最终、决定性的纠正。
 - **结果:** **构建系统修复成功！** 本地构建现在可以正确地生成分离的客户端和服务器产物，目录结构完全正确。
 
+#### 尝试 #11: 部署配置修正
+
+- **操作:** 修正 `package.json` 和 `vite.config.mts` 后，在 Cloudflare Pages 上进行部署。
+- **原因:** 验证已修复的本地构建流程在生产环境是否能正确执行。
+- **结果:** **构建成功，部署失败。**
+  - 构建流程完全成功，生成了正确的 `dist/client` 和 `dist/server` 目录。
+  - 但 `wrangler deploy` 命令在"上传资源"阶段失败，错误为 `ENOENT: no such file or directory, scandir '/opt/buildhome/repo/frontend/dist'`。
+  - **根本原因:** `wrangler.jsonc` 文件中的 `site.bucket` 属性，仍然指向一个旧的、不存在的路径 (`frontend/dist`)。我只修正了构建，却忘了修正部署。
+
 ---
 
-### 下一阶段: 解决根本性渲染错误
+### 终极决战
 
-既然构建流程已完全修复，我们现在可以将注意力集中在最初的 `Element type is invalid` 错误上。
+我们已经扫清了所有外围障碍。现在只剩下最后一步配置，就可以直面最终的渲染错误。
 
-**下一步行动:**
+**下一步行动 (最后一步准备):**
 
-1.  **修正 `src/index.ts`:** 更新服务器入口文件，使其能从正确的路径 (`../dist/client` 和 `../dist/server`) 加载新的构建产物，并使用正确的键 (`src/entry-client.tsx`) 来查找客户端清单。这是在正面解决渲染错误之前的最后一步准备工作。
-2.  **恢复 `entry-server.tsx`:** 将 `frontend/src/entry-server.tsx` 恢复到其原始的、包含完整渲染逻辑的状态。
-3.  **触发并分析错误:** 重新部署或在本地启动，以重现 `Element type is invalid` 错误。由于构建问题已被排除，我们可以确定这是由 React 组件、路由或 UI 库在 SSR 环境下的模块兼容性问题引起的。
-4.  **精准打击:** 基于`ssr.noExternal`的配置，进一步分析和解决此问题。
+1.  **修正 `wrangler.jsonc`:** 我将 `site.bucket` 的路径从 `"frontend/dist"` 修改为 `"./dist/client"`，以精确指向我们新的客户端静态资源目录。
+2.  **触发最终部署:** 在您确认修改后，重新部署，我们将最终看到最初的 `Element type is invalid` 错误。
