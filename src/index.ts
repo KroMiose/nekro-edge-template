@@ -70,12 +70,12 @@ app.get("*", async (c) => {
   try {
     // Note: These are dynamic imports, and will only be available after building the frontend.
     // @ts-ignore
-    const manifest = await import("../frontend/dist/.vite/manifest.json");
+    const manifest = await import("../dist/client/.vite/manifest.json");
     // @ts-ignore
-    const { render } = await import("../frontend/dist/entry-server.mjs");
+    const { render } = await import("../dist/server/entry-server.mjs");
 
-    const rendered = await render({ url: c.req.url });
-    const entry = (manifest as Record<string, any>)["frontend/src/entry-client.tsx"];
+    const rendered = await render(c.req.url);
+    const entry = (manifest as Record<string, any>)["src/entry-client.tsx"];
 
     if (!entry) {
       throw new Error("Could not find frontend entry in manifest.json");

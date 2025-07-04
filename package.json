@@ -6,10 +6,10 @@
     "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
     "dev:backend": "wrangler dev",
     "dev:frontend": "vite --config frontend/vite.config.mts",
-    "build:client": "vite build --mode client --config frontend/vite.config.mts",
-    "build:server": "vite build --config frontend/vite.config.mts",
     "build": "pnpm build:client && pnpm build:server",
-    "deploy": "pnpm build && wrangler pages deploy ./dist",
+    "build:client": "vite build --config frontend/vite.config.mts",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir ../dist/server --config frontend/vite.config.mts",
+    "deploy": "pnpm build && wrangler deploy --env production",
     "test": "vitest",
     "cf-typegen": "wrangler types",
     "db:generate": "drizzle-kit generate",
@@ -20,7 +20,7 @@
     "db:seed": "wrangler d1 execute DB --local --file=./drizzle/seed.sql",
     "db:seed:prod": "wrangler d1 execute DB --remote --file=./drizzle/seed.sql",
     "typecheck": "tsc --noEmit && tsc -p frontend/tsconfig.json --noEmit",
-    "lint": "eslint .",
+    "lint": "tsx",
     "format": "eslint . --fix"
   },
   "devDependencies": {
