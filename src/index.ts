@@ -95,8 +95,9 @@ app.get("*", async (c) => {
   } catch (e) {
     console.error("SSR failed:", e);
     // Fallback to a simple error page if SSR fails.
+    const errorMessage = e instanceof Error ? `${e.message}\n${e.stack}` : String(e);
     return c.html(
-      "<!DOCTYPE html><html><head><title>Render Error</title></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p></body></html>",
+      `<!DOCTYPE html><html><head><title>Render Error</title></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p><hr><pre>${errorMessage}</pre></body></html>`,
       500,
     );
   }
