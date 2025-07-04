@@ -124,20 +124,77 @@
 
 我将修改 `src/index.ts`，使用正确的键 `"index.html"` 来读取 `manifest.json`，从而一劳永逸地解决这个问题。
 
-#### 新的挑战: MIME 类型错误
+#### 新的挑战: MIME 类型错误 & 静态资源服务
 
 - **操作:** 运行 `pnpm serve:prod`，修正 `manifest.json` 键后，页面可以进行服务端渲染，但浏览器控制台报错。
 - **错误:**
   - `Refused to apply style from '...' because its MIME type ('text/html') is not a supported stylesheet MIME type.`
   - `Failed to load module script: ... responded with a MIME type of "text/html".`
 - **原因:** SSR 成功后，浏览器尝试加载 HTML 中引用的 CSS 和 JS 资源 (`/assets/...`)。但我们的 Hono 应用没有配置静态文件服务。所有未匹配到 API 路由的请求，包括对静态资源的请求，都被通配符路由 `app.get('*', ...)` 捕获，并错误地返回了 SSR 生成的 HTML 页面，导致了 MIME 类型不匹配。
-- **解决方案:**
-  1.  引入 Hono 官方为 Cloudflare Pages 设计的静态文件服务中间件 `@hono/static-site`。
-  2.  在 `src/index.ts` 中，将此中间件注册在 SSR 处理器**之前**。
-  3.  此中间件会拦截指向静态资源的请求并正确地提供文件服务。对于无法匹配为静态文件的请求（如页面路由 `/`），它会跳过并交由后续的 SSR 处理器处理。
+
+#### 尝试 #13: Material-UI Icons SSR 兼容性修复
+
+- **操作:** 在 `frontend/vite.config.mts` 的 `ssr.noExternal` 数组中添加 `"@mui/icons-material"`。
+- **原因:** `ToggleThemeButton` 组件中使用的 Material-UI 图标在SSR环境下出现 CJS/ESM 兼容性问题。
+- **结果:** **SSR问题解决成功！** 页面能够正常进行服务端渲染并显示，但静态资源的 MIME 类型错误仍然存在。
+
+#### 尝试 #14: 错误的静态文件服务方案
+
+- **操作:**
+  1. 尝试安装 `@hono/static-site` 包 (失败，包不存在)
+  2. 尝试使用 `serveStatic` 中间件但API使用错误
+  3. 尝试通过 `c.env.ASSETS.fetch()` 处理静态资源
+- **原因:** 对 Cloudflare Pages 静态文件服务机制的理解不准确。
+- **结果:** **部分成功但配置错误。** 虽然思路正确，但在 `wrangler dev --env production` 模式下，旧的 `site.bucket` 配置格式可能导致 ASSETS binding 无法正常工作。
+
+#### 尝试 #15: 配置格式现代化 - 最终解决方案
+
+- **操作:**
+  1. **wrangler.jsonc 现代化:** 将旧的 `site.bucket` 配置替换为新的 `assets` binding 格式
+  2. **Assets binding 统一:** 在全局和生产环境中都配置正确的 `assets.binding: "ASSETS"` 和 `assets.directory: "./dist/client"`
+  3. **静态资源处理优化:** 在 `src/index.ts` 中通过 `c.env.ASSETS.fetch()` 正确处理 `/assets/` 路径的请求
+- **原因:** 用户提供了另一个可行项目的现代化配置格式，显示应该使用新的 `assets` binding 而不是已废弃的 `site` 配置。
+- **结果:** **完全成功！**
+  - SSR 正常工作
+  - 静态资源能正确服务，MIME 类型正确
+  - 控制台可能还有少量报错，但基本功能完全正常
 
 ---
 
-**根治之路:**
+## 💡 核心经验总结
 
-我将安装 `@hono/static-site` 并修改 `src/index.ts` 来最终解决静态资源服务的问题。
+### 1. Vite SSR 的关键配置
+
+- **ssr.noExternal:** 对于有 CJS/ESM 兼容性问题的库（特别是 React 生态和 UI 库），必须显式添加到此列表
+- **关键库清单:** `react-router-dom`, `@mui/material`, `@mui/system`, `@mui/icons-material`, `@emotion/react`, `@emotion/styled`
+
+### 2. Cloudflare Workers 静态资源最佳实践
+
+- **避免使用已废弃的配置:** `site.bucket` 已被新的 `assets` binding 取代
+- **现代化配置格式:**
+  ```json
+  {
+    "assets": {
+      "binding": "ASSETS",
+      "directory": "./dist/client"
+    }
+  }
+  ```
+- **运行时处理:** 使用 `c.env.ASSETS.fetch(c.req.raw)` 来服务静态文件
+
+### 3. 调试流程最佳实践
+
+- **本地复现优先:** 使用 `wrangler dev --env production` 在本地复现生产环境
+- **逐步隔离问题:** 从简单的测试用例开始，逐步增加复杂性
+- **打印调试信息:** 通过 `console.log` 直接观察运行时数据（如 `manifest.json` 内容）
+- **避免云端调试:** 云端部署调试效率极低，应该作为最后手段
+
+### 4. 常见陷阱与避免方法
+
+- **路径解析陷阱:** Vite 配置中的路径必须相对于正确的 root 目录
+- **配置版本混用:** 不要在同一个项目中混用新旧配置格式
+- **MIME 类型错误根因:** 通常是静态文件服务配置错误，导致所有请求都返回 HTML
+
+---
+
+**最终状态:** SSR 和静态资源服务均已正常工作，项目可以正常运行在 Cloudflare Pages 环境中。

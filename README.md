@@ -1,169 +1,261 @@
 # NekroEdge
 
-这是一个基于 Cloudflare Pages & Workers 构建的全栈应用模板，使用 Hono 作为后端框架，React (Vite) 作为前端，Cloudflare D1 作为数据库。
+> 🚀 **一个基于 Cloudflare 技术栈的现代化全栈应用模板**
 
-它提供了一套完整的、类型安全的开发环境，包含数据库 ORM (Drizzle)，自动化的 API 文档 (Swagger UI)，一个集中式、可切换的亮/暗主题系统 (MUI)，以及现代化的前端工具链。
+这是一个基于 Cloudflare Pages & Workers 构建的**生产级**全栈应用模板，使用 **Hono + React + D1** 技术栈，提供开箱即用的开发体验和端到端类型安全。
 
-## ✨ 特性
+## ✨ 核心特性
 
-- **全栈框架**: [Hono](https://hono.dev/) - 在 Cloudflare Workers 上运行的快速、轻量级的 Web 框架。
-- **前端**: [React](https://react.dev/) + [Vite](https://vitejs.dev/) - 享受现代化的、闪电般快速的开发体验。
-- **UI 组件**: [Material-UI](https://mui.com/) & [UnoCSS](https://unocss.dev/) - 兼顾功能与原子化CSS的灵活。
-- **数据库**: [Cloudflare D1](https://developers.cloudflare.com/d1/) - Cloudflare 的原生无服务器数据库。git branch -M main
-- **ORM**: [Drizzle ORM](https://orm.drizzle.team/) - 提供端到端类型安全的 TypeScript ORM。
-- **验证**: [Zod](https://zod.dev/) - 用于保证从客户端到数据库的数据类型安全。
-- **部署**: 一键部署到 [Cloudflare Pages](https://pages.cloudflare.com/)。
+- 🏗️ **全栈框架**: [Hono](https://hono.dev/) - 在 Cloudflare Workers 上运行的快速、轻量级的 Web 框架
+- ⚛️ **现代前端**: [React](https://react.dev/) + [Vite](https://vitejs.dev/) - 享受闪电般快速的开发体验
+- 🎨 **UI 组件库**: [Material-UI](https://mui.com/) + [UnoCSS](https://unocss.dev/) - 功能完整且灵活的设计系统
+- 🗄️ **无服务器数据库**: [Cloudflare D1](https://developers.cloudflare.com/d1/) - Cloudflare 原生数据库
+- 🔒 **类型安全 ORM**: [Drizzle ORM](https://orm.drizzle.team/) - 端到端 TypeScript 类型安全
+- ✅ **数据验证**: [Zod](https://zod.dev/) - 从客户端到数据库的完整数据类型安全
+- 🌙 **主题系统**: 内置亮/暗模式切换，完全可定制
+- 📖 **自动化文档**: 集成 Swagger UI，API 文档自动生成
+- 🚀 **一键部署**: 完整的 [Cloudflare Pages](https://pages.cloudflare.com/) 部署配置
 
 ## 🚀 快速开始
 
-### 1. 克隆仓库
+### 1. 创建项目
 
 ```bash
-# 将 "your-repo-name" 替换为你的项目名
-git clone https://github.com/KroMiose/nekro-edge-template.git your-repo-name
-cd your-repo-name
-```
+# 使用模板创建新项目 (建议 Fork 后使用)
+git clone https://github.com/KroMiose/nekro-edge-template.git your-project-name
+cd your-project-name
 
-### 2. 安装依赖
-
-```bash
+# 安装依赖
 pnpm install
 ```
 
-### 3. 启动本地开发 (开箱即用)
-
-本项目已配置为**开箱即用**的本地开发环境。直接运行以下命令即可启动：
+### 2. 本地开发 (开箱即用)
 
 ```bash
+# 启动开发服务器
 pnpm dev
 ```
 
-Wrangler 会自动在项目根目录的 `.wrangler/` 文件夹下创建一个本地 D1 数据库。为了完成初始化，您需要为这个**本地数据库**运行迁移来创建数据表：
+首次启动时，Wrangler 会自动创建本地 D1 数据库。运行数据库迁移完成初始化：
 
 ```bash
+# 初始化本地数据库
 pnpm db:migrate
 ```
 
-现在，您的本地开发环境已经完全就绪！
+🎉 **开发环境已就绪！**
 
-- Hono 后端服务: `http://localhost:8787`
-- Vite 前端服务: `http://localhost:5173`
+- 🔗 **后端 API**: http://localhost:8787
+- 🔗 **前端应用**: http://localhost:5173 (通过后端代理访问)
+- 📚 **API 文档**: http://localhost:8787/api/doc
 
-### 4. 配置生产环境
+## 🌐 部署到 Cloudflare Pages
 
-当您准备好将项目部署到线上时，需要为生产环境配置一个真实的 Cloudflare D1 数据库。
+### 步骤 1: 准备生产数据库
 
-#### a. 创建生产数据库
-
-登录您的 Cloudflare 账户后，运行以下命令：
+> ⚠️ **重要**: 生产环境需要独立的 D1 数据库实例
 
 ```bash
-# 将 <your-prod-db-name> 替换为您期望的生产数据库名
-pnpm wrangler d1 create <your-prod-db-name>
+# 创建生产数据库 (替换为你的数据库名)
+npx wrangler d1 create your-prod-db-name
 ```
 
-这条命令会返回新建数据库的 `database_name` 和 `database_id`，请务必记下它们。
-
-#### b. 修改 `wrangler.jsonc`
-
-打开项目根目录下的 `wrangler.jsonc` 文件。找到 `env.production` 配置块，并将 `d1_databases` 节下的 `database_name` 和 `database_id` 替换为您**上一步**创建的生产数据库信息。
-
-**重要提示**: 您修改的是 `env.production` 内部的配置，顶层的配置是为本地开发保留的，请勿改动。
+记录返回的 `database_name` 和 `database_id`，然后更新 `wrangler.jsonc`:
 
 ```jsonc
-// wrangler.jsonc
-
-// ... (顶层的本地开发配置保持不变) ...
-
+{
   "env": {
     "production": {
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "your-prod-db-name", // <-- 替换成你的生产数据库名
-          "database_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", // <-- 替换成你的生产数据库ID
-          "migrations_dir": "drizzle"
-        }
+          "database_name": "your-prod-db-name", // 👈 替换这里
+          "database_id": "your-database-id", // 👈 替换这里
+          "migrations_dir": "drizzle",
+        },
       ],
-// ... (其余生产配置) ...
+      // ... 其他配置保持不变
+    },
+  },
+}
 ```
 
-#### c. 运行生产数据库迁移
-
 ```bash
-# 此命令会将迁移应用到您在 env.production 中配置的远程数据库上
+# 运行生产数据库迁移
 pnpm db:migrate:prod
 ```
 
-至此，您的生产环境已配置完毕。
+### 步骤 2: 连接到 Cloudflare Pages
 
-### 5. 部署到 Cloudflare (Git-Integrated)
+1. **推送代码到 Git 仓库** (GitHub/GitLab)
 
-当您通过 Git 将项目连接到 Cloudflare Pages 后，自动化部署是推荐的方式。
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
 
-#### a. 构建配置
+2. **在 Cloudflare Dashboard 中**:
+   - 进入 [Cloudflare Pages](https://dash.cloudflare.com/pages)
+   - 点击 **"Create a project"** → **"Connect to Git"**
+   - 选择你的 Git 仓库并授权
 
-在您的 Cloudflare Pages 项目仪表盘中，前往 **Settings** > **Build & deployments**，并确认以下配置：
+### 步骤 3: 配置构建设置
 
-- **Build command**: `pnpm build`
-- **Build output directory**: `frontend/dist`
-- **Root directory**: `/` (保持默认)
+> 📋 **重要配置**: 在 Cloudflare Pages 项目设置中配置以下参数
 
-#### b. 环境变量 (首次部署必须！)
+#### 🔧 **构建配置**
 
-为了让 Cloudflare 在构建时使用正确的生产环境配置，您**必须**在 **Build & deployments** 设置页面中添加一个环境变量：
+在 **Settings** → **Build & deployments** 中设置:
 
-- 在 **Environment variables (production)** 部分，点击 **Add variable**。
-- 设置变量:
-  - Variable name: `WRANGLER_ENV`
-  - Value: `production`
-- 保存设置。
+| 配置项       | 值                                     |
+| ------------ | -------------------------------------- |
+| **构建命令** | `pnpm build`                           |
+| **部署命令** | `npx wrangler deploy --env production` |
+| **根目录**   | `/`                                    |
 
-完成以上配置后，每次 `git push` 到您的主分支时，Cloudflare Pages 都会自动运行 `pnpm build` 命令，并将 `frontend/dist` 目录下的内容正确部署。
+#### 🌍 **环境变量**
 
-### 6. 手动部署 (可选)
+在 **Settings** → **Environment variables** 中添加:
 
-如果您希望从本地计算机手动触发部署，可以使用我们为此准备的脚本。请确保您已通过 `npx wrangler login` 登录。
+| 变量名     | 值           | 环境       |
+| ---------- | ------------ | ---------- |
+| `NODE_ENV` | `production` | Production |
+
+### 步骤 4: 触发部署
+
+配置完成后，推送任何代码更改都会自动触发部署：
 
 ```bash
-pnpm deploy:manual
+git add .
+git commit -m "Deploy to production"
+git push origin main
 ```
 
-该命令会使用 `wrangler.jsonc` 中 `env.production` 的配置进行部署。
+🎉 **部署完成！** 你的应用现在可以通过 Cloudflare Pages 提供的 URL 访问了。
 
-## 📚 目录结构
+## 📁 项目结构
 
 ```
-.
-├── frontend/
-│   ├── src/
-│   │   ├── components/   # (可选) 可复用的 React 组件
-│   │   ├── context/
-│   │   │   └── ThemeContextProvider.tsx # 全局主题状态管理器
-│   │   ├── pages/        # 页面级组件 (PortalPage, PostsPage)
-│   │   ├── App.tsx       # 客户端应用主布局 (带导航栏和页脚)
-│   │   ├── entry-client.tsx # 客户端渲染(CSR)入口
-│   │   ├── entry-server.tsx # 服务器端渲染(SSR)入口
-│   │   └── theme.ts      # MUI 主题配置文件
-│   ├── index.html      # 应用的 HTML 壳
-│   └── vite.config.mts # Vite 配置文件
-├── src/
-│   ├── db/
-│   │   └── schema.ts     # Drizzle ORM 数据库模型
-│   ├── routes/
-│   │   └── post.ts       # API 路由示例 (文章)
-│   ├── validators/
-│   │   └── post.schema.ts # API 请求体验证 Schema
-│   └── index.ts          # Hono 后端入口文件
-├── .github/              # (可选) GitHub Actions 配置文件
-├── migrations/           # Drizzle ORM 数据库迁移文件
-├── package.json
-└── wrangler.jsonc
+your-project/
+├── 📁 frontend/              # 前端应用
+│   ├── 📁 src/
+│   │   ├── 📁 components/    # 可复用组件
+│   │   ├── 📁 context/       # React Context 状态管理
+│   │   ├── 📁 pages/         # 页面组件
+│   │   ├── 📁 theme/         # 主题配置
+│   │   ├── 📄 App.tsx        # 应用主布局
+│   │   ├── 📄 entry-client.tsx  # 客户端入口
+│   │   └── 📄 entry-server.tsx  # SSR 入口
+│   ├── 📄 index.html         # HTML 模板
+│   └── 📄 vite.config.mts    # Vite 配置
+├── 📁 src/                   # 后端应用
+│   ├── 📁 db/                # 数据库模型
+│   ├── 📁 routes/            # API 路由
+│   ├── 📁 validators/        # 数据验证
+│   └── 📄 index.ts           # Hono 后端入口
+├── 📁 drizzle/               # 数据库迁移文件
+├── 📄 wrangler.jsonc         # Cloudflare Workers 配置
+└── 📄 package.json           # 项目依赖和脚本
 ```
 
-## 💎 代码风格与格式化
+## 🛠️ 开发指南
 
-本项目使用 [Prettier](https://prettier.io/) 来统一代码风格。
+### 常用命令
 
-- **手动格式化**: `pnpm format`
-- **自动格式化**: 项目包含了 `.vscode/settings.json` 配置文件。如果你安装了 [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) VS Code 插件，它将在你保存文件时自动进行格式化。
+```bash
+# 开发
+pnpm dev                    # 启动开发服务器
+pnpm build                  # 构建生产版本
+pnpm preview               # 预览生产构建
+
+# 数据库
+pnpm db:generate           # 生成数据库迁移
+pnpm db:migrate            # 应用本地迁移
+pnpm db:migrate:prod       # 应用生产迁移
+pnpm db:studio             # 打开数据库管理界面
+
+# 代码质量
+pnpm format                # 格式化代码
+pnpm type-check            # 类型检查
+```
+
+### 添加新的 API 路由
+
+1. **定义数据验证 Schema** (`src/validators/`)
+2. **创建路由处理器** (`src/routes/`)
+3. **在 `src/index.ts` 中注册路由**
+
+```typescript
+// src/validators/user.schema.ts
+export const CreateUserSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+});
+
+// src/routes/user.ts
+export const userRoutes = new OpenAPIHono().openapi(
+  createRoute({
+    method: "post",
+    path: "/users",
+    request: { body: { content: { "application/json": { schema: CreateUserSchema } } } },
+    responses: { 200: { description: "User created" } },
+  }),
+  async (c) => {
+    // 实现逻辑
+  },
+);
+```
+
+### 主题定制
+
+项目包含完整的亮/暗模式主题系统。在 `frontend/src/theme/` 中定制：
+
+```typescript
+// frontend/src/theme/index.ts
+export const lightTheme = createTheme({
+  palette: {
+    mode: "light",
+    // 自定义颜色...
+  },
+});
+```
+
+## 🔧 故障排除
+
+### 常见问题
+
+**Q: 构建失败，找不到模块**  
+A: 确保在 `frontend/vite.config.mts` 的 `ssr.noExternal` 中包含了所有必要的依赖
+
+**Q: 静态资源加载失败 (MIME 类型错误)**  
+A: 检查 `wrangler.jsonc` 中的 `assets` 配置是否正确
+
+**Q: 数据库连接失败**  
+A: 确认 `wrangler.jsonc` 中的数据库配置正确，并运行了迁移
+
+### 获取帮助
+
+- 📖 [项目文档](./docs/)
+- 🐛 [报告问题](https://github.com/KroMiose/nekro-edge-template/issues)
+- 💬 [讨论区](https://github.com/KroMiose/nekro-edge-template/discussions)
+
+---
+
+## 📄 许可证
+
+MIT License - 详见 [LICENSE](./LICENSE) 文件
+
+## 🙏 致谢
+
+感谢以下优秀的开源项目：
+
+- [Cloudflare](https://cloudflare.com/) - 强大的边缘计算平台
+- [Hono](https://hono.dev/) - 现代化的 Web 框架
+- [React](https://react.dev/) - 用户界面库
+- [Vite](https://vitejs.dev/) - 下一代前端工具
+- [Drizzle ORM](https://orm.drizzle.team/) - TypeScript ORM
+
+---
+
+**🚀 开始构建你的下一个伟大应用吧！**

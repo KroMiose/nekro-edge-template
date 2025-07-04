@@ -92,3 +92,10 @@ alwaysApply: true
         2.  **日志优先**：必须逐行、仔细地审查所有日志输出，特别是警告信息。一个被忽略的警告往往是定位问题根源的关键。
         3.  **验证语法**：在提出任何代码或配置修改，特别是针对包管理器（如 `pnpm`）或构建工具的复杂语法时，**必须**通过官方文档或实例进行交叉验证。严禁提供任何未经证实或凭空捏造的解决方案。
         4.  **承认局限**：当问题源于平台本身的限制时，必须清晰地向用户阐明这一事实，并解释为何需要采用"变通方案"（Workaround）。变通方案本身也必须是经过验证的、社区公认的最佳实践，而非临时拼凑的"黑魔法"。
+
+6.  **Cloudflare Workers & SSR 特殊规则**:
+    -   **现代化配置优先**: 始终使用最新的 `assets` binding，禁止使用已废弃的 `site.bucket` 配置
+    -   **SSR 兼容性处理**: 对于 React 生态库（特别是 Material-UI 相关），必须在 `frontend/vite.config.mts` 的 `ssr.noExternal` 中显式声明
+    -   **本地调试优先**: 使用 `wrangler dev --env production` 进行本地生产环境调试，避免依赖云端部署进行故障排查
+    -   **静态资源服务**: 生产环境中通过 `c.env.ASSETS.fetch()` 处理静态文件请求，确保正确的 MIME 类型
+    -   **关键库清单**: 以下库必须包含在 `ssr.noExternal` 中：`react-router-dom`, `@mui/material`, `@mui/system`, `@mui/icons-material`, `@emotion/react`, `@emotion/styled`, `react-i18next`, `i18next`
