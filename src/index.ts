@@ -72,7 +72,7 @@ app.get("*", async (c) => {
     // @ts-ignore
     const manifest = await import("../frontend/dist/.vite/manifest.json");
     // @ts-ignore
-    const { render } = await import("../frontend/dist/server/entry-server.mjs");
+    const { render } = await import("../frontend/dist/entry-server.mjs");
 
     const rendered = await render({ url: c.req.url });
     const entry = (manifest as Record<string, any>)["frontend/src/entry-client.tsx"];
