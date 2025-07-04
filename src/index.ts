@@ -75,7 +75,7 @@ app.get("*", async (c) => {
     const { render } = await import("../frontend/dist/entry-server.mjs");
 
     const rendered = await render({ url: c.req.url });
-    const entry = (manifest as Record<string, any>)["src/entry-client.tsx"];
+    const entry = (manifest as Record<string, any>)["frontend/src/entry-client.tsx"];
 
     if (!entry) {
       throw new Error("Could not find frontend entry in manifest.json");

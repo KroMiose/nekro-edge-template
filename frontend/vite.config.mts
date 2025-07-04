@@ -26,7 +26,7 @@ export default defineConfig({
     manifest: true,
     ssr: "src/entry-server.tsx",
     rollupOptions: {
-      input: "/src/entry-client.tsx",
+      input: "frontend/src/entry-client.tsx",
     },
   },
   ssr: {
