@@ -25,6 +25,9 @@ export default defineConfig({
     outDir: "dist",
     manifest: true,
     ssr: "src/entry-server.tsx",
+    rollupOptions: {
+      input: "/src/entry-client.tsx",
+    },
   },
   ssr: {
     noExternal: [

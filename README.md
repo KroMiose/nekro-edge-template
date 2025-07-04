@@ -97,13 +97,39 @@ pnpm db:migrate:prod
 
 至此，您的生产环境已配置完毕。
 
-## 部署到 Cloudflare
+### 5. 部署到 Cloudflare (Git-Integrated)
 
-部署应用到 Cloudflare 非常简单。该命令会自动使用 `wrangler.jsonc` 中 `env.production` 的配置。
+当您通过 Git 将项目连接到 Cloudflare Pages 后，自动化部署是推荐的方式。
+
+#### a. 构建配置
+
+在您的 Cloudflare Pages 项目仪表盘中，前往 **Settings** > **Build & deployments**，并确认以下配置：
+
+- **Build command**: `pnpm build`
+- **Build output directory**: `frontend/dist`
+- **Root directory**: `/` (保持默认)
+
+#### b. 环境变量 (首次部署必须！)
+
+为了让 Cloudflare 在构建时使用正确的生产环境配置，您**必须**在 **Build & deployments** 设置页面中添加一个环境变量：
+
+- 在 **Environment variables (production)** 部分，点击 **Add variable**。
+- 设置变量:
+  - Variable name: `WRANGLER_ENV`
+  - Value: `production`
+- 保存设置。
+
+完成以上配置后，每次 `git push` 到您的主分支时，Cloudflare Pages 都会自动运行 `pnpm build` 命令，并将 `frontend/dist` 目录下的内容正确部署。
+
+### 6. 手动部署 (可选)
+
+如果您希望从本地计算机手动触发部署，可以使用我们为此准备的脚本。请确保您已通过 `npx wrangler login` 登录。
 
 ```bash
-pnpm deploy
+pnpm deploy:manual
 ```
+
+该命令会使用 `wrangler.jsonc` 中 `env.production` 的配置进行部署。
 
 ## 📚 目录结构
 
