@@ -27,6 +27,14 @@ export default defineConfig({
     ssr: "src/entry-server.tsx",
   },
   ssr: {
-    noExternal: ["react-router-dom", "@mui/material", "@emotion/react", "@emotion/styled"],
+    noExternal: [
+      "react-router-dom",
+      "@mui/material",
+      "@mui/system",
+      "@emotion/react",
+      "@emotion/styled",
+      "react-i18next",
+      "i18next",
+    ],
   },
 });
