@@ -9,7 +9,7 @@
 - **全栈框架**: [Hono](https://hono.dev/) - 在 Cloudflare Workers 上运行的快速、轻量级的 Web 框架。
 - **前端**: [React](https://react.dev/) + [Vite](https://vitejs.dev/) - 享受现代化的、闪电般快速的开发体验。
 - **UI 组件**: [Material-UI](https://mui.com/) & [UnoCSS](https://unocss.dev/) - 兼顾功能与原子化CSS的灵活。
-- **数据库**: [Cloudflare D1](https://developers.cloudflare.com/d1/) - Cloudflare 的原生无服务器数据库。
+- **数据库**: [Cloudflare D1](https://developers.cloudflare.com/d1/) - Cloudflare 的原生无服务器数据库。git branch -M main
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/) - 提供端到端类型安全的 TypeScript ORM。
 - **验证**: [Zod](https://zod.dev/) - 用于保证从客户端到数据库的数据类型安全。
 - **部署**: 一键部署到 [Cloudflare Pages](https://pages.cloudflare.com/)。
