@@ -1,75 +1,61 @@
-import { Box, Paper, Typography, useTheme } from "@mui/material";
-import { ReactNode } from "react";
+import { Box, Paper, Typography } from "@mui/material";
+import { motion } from "framer-motion";
+import { ReactElement } from "react";
 
 interface TechCardProps {
-  icon?: ReactNode;
-  iconUrl?: string;
-  title: string;
+  name: string;
   description: string;
-  hoverColor?: string;
+  icon: ReactElement;
+  color: string;
 }
 
-export const TechCard = ({ icon, iconUrl, title, description, hoverColor }: TechCardProps) => {
-  const theme = useTheme();
-
+export const TechCard = ({ name, description, icon, color }: TechCardProps) => {
   return (
-    <Paper
-      elevation={4}
-      sx={{
-        p: 4,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        textAlign: "center",
-        backgroundColor: "rgba(255, 255, 255, 0.05)",
-        backdropFilter: "blur(12px)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        borderRadius: "16px",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-        "&:hover": {
-          transform: "translateY(-8px)",
-          boxShadow: `0 8px 32px 0 ${hoverColor || theme.palette.primary.main}40`,
-          borderColor: hoverColor || theme.palette.primary.light,
-        },
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ amount: 0.3 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.05 }}
     >
-      <Box
-        sx={{
-          width: 64,
-          height: 64,
-          mb: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: hoverColor || theme.palette.primary.main,
-          "& > svg": {
-            width: "100%",
-            height: "100%",
+      <Paper
+        elevation={4}
+        sx={(theme) => ({
+          p: 3,
+          height: "100%",
+          borderRadius: "16px",
+          textAlign: "center",
+          transition: "all 0.3s ease-in-out",
+          background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`,
+          border: `1px solid ${theme.palette.divider}`,
+          "&:hover": {
+            transform: "translateY(-8px)",
+            boxShadow: `0 20px 40px rgba(0,0,0,0.1)`,
+            borderColor: color,
           },
-        }}
+        })}
       >
-        {iconUrl ? (
-          <img
-            src={iconUrl}
-            alt={`${title} logo`}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-            }}
-          />
-        ) : (
-          icon
-        )}
-      </Box>
-      <Typography variant="h5" component="h3" fontWeight="bold" gutterBottom>
-        {title}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {description}
-      </Typography>
-    </Paper>
+        <Box
+          sx={{
+            mb: 2,
+            p: 2,
+            borderRadius: "12px",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 80,
+          }}
+        >
+          {icon}
+        </Box>
+        <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: "bold" }}>
+          {name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {description}
+        </Typography>
+      </Paper>
+    </motion.div>
   );
 };

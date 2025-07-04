@@ -1,25 +1,18 @@
-import { Box, useTheme } from "@mui/material";
-import { FeatureSection } from "@frontend/components/landing/FeatureSection";
+import { Box } from "@mui/material";
 import { HeroSection } from "@frontend/components/landing/HeroSection";
-import { ServerlessAdvantageSection } from "@frontend/components/landing/ServerlessAdvantageSection";
+import { FeatureSection } from "@frontend/components/landing/FeatureSection";
 import { TechStackSection } from "@frontend/components/landing/TechStackSection";
 import { UseCaseSection } from "@frontend/components/landing/UseCaseSection";
+import { ServerlessAdvantageSection } from "@frontend/components/landing/ServerlessAdvantageSection";
 
 const HomePage = () => {
-  const theme = useTheme();
-
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        background: theme.pageBackground,
-      }}
-    >
+    <Box>
       <HeroSection />
       <FeatureSection />
-      <UseCaseSection />
-      <ServerlessAdvantageSection />
       <TechStackSection />
+      <ServerlessAdvantageSection />
+      <UseCaseSection />
     </Box>
   );
 };

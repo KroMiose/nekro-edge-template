@@ -3,28 +3,21 @@ import { SVGProps } from "react";
 export const NekroEdgeLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <defs>
-      <linearGradient id="backend-grad" x1="0" y1="0" x2="1" y2="1">
+      <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stopColor="#8A2BE2" />
-        <stop offset="100%" stopColor="#4A90E2" />
-      </linearGradient>
-      <linearGradient id="frontend-grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#50E3C2" />
-        <stop offset="100%" stopColor="#4A90E2" />
+        <stop offset="50%" stopColor="#4A90E2" />
+        <stop offset="100%" stopColor="#50E3C2" />
       </linearGradient>
       <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
         <feDropShadow dx="2" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.2" />
       </filter>
     </defs>
-    {/* Backend Hexagon */}
-    <path d="M32 4L54 18V46L32 60L10 46V18L32 4Z" fill="url(#backend-grad)" filter="url(#shadow)" />
-    {/* Frontend Arc */}
-    <path
-      d="M10 32 C 20 12, 44 12, 54 32"
-      stroke="url(#frontend-grad)"
-      strokeWidth="6"
-      strokeLinecap="round"
-      fill="none"
-    />
+    {/* Main Hexagon */}
+    <path d="M32 4L54 18V46L32 60L10 46V18L32 4Z" fill="url(#logo-grad)" filter="url(#shadow)" />
+    {/* Center Circle */}
+    <circle cx="32" cy="32" r="8" fill="white" opacity="0.9" />
+    {/* Inner Symbol */}
+    <path d="M28 28L36 32L28 36V28Z" fill="url(#logo-grad)" />
   </svg>
 );
 
@@ -92,5 +85,59 @@ export const MuiLogo = (props: SVGProps<SVGSVGElement>) => (
       d="M30.343 21.976a1 1 0 00.502-.864l.018-5.787a1 1 0 01.502-.864l3.137-1.802a1 1 0 011.498.867v10.521a1 1 0 01-.502.867l-11.839 6.8a1 1 0 01-.994.001l-9.291-5.314a1 1 0 01-.504-.868v-5.305c0-.006.007-.01.013-.007.005.003.012 0 .012-.007v-.006c0-.004.002-.008.006-.01l7.652-4.396c.007-.004.004-.015-.004-.015a.008.008 0 01-.008-.008l.015-5.201a1 1 0 00-1.5-.87l-5.687 3.277a1 1 0 01-.998 0L6.666 9.7a1 1 0 00-1.499.866v9.4a1 1 0 01-1.496.869l-3.166-1.81a1 1 0 01-.504-.87l.028-16.43A1 1 0 011.527.86l10.845 6.229a1 1 0 00.996 0L24.21.86a1 1 0 011.498.868v16.434a1 1 0 01-.501.867l-5.678 3.27a1 1 0 00.004 1.735l3.132 1.783a1 1 0 00.993-.002l6.685-3.839z"
       fill="#007FFF"
     />
+  </svg>
+);
+
+export const ViteLogo = (props: SVGProps<SVGSVGElement>) => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <defs>
+      <linearGradient id="vite-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#41D1FF" />
+        <stop offset="100%" stopColor="#BD34FE" />
+      </linearGradient>
+    </defs>
+    <path d="M54 14L32 50L10 14L32 4L54 14Z" fill="url(#vite-grad)" />
+    <path d="M32 20L26 40L38 40L32 20Z" fill="white" />
+  </svg>
+);
+
+export const TypeScriptLogo = (props: SVGProps<SVGSVGElement>) => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <rect width="64" height="64" rx="8" fill="#3178C6" />
+    <path d="M20 28H28V36H20V28ZM32 28H40V36H32V28ZM44 28H52V36H44V28Z" fill="white" />
+    <text x="32" y="44" textAnchor="middle" fill="white" fontSize="12" fontFamily="monospace" fontWeight="bold">
+      TS
+    </text>
+  </svg>
+);
+
+export const HonoLogo = (props: SVGProps<SVGSVGElement>) => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <defs>
+      <linearGradient id="hono-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#E65100" />
+        <stop offset="100%" stopColor="#FF9800" />
+      </linearGradient>
+    </defs>
+    <circle cx="32" cy="32" r="28" fill="url(#hono-grad)" />
+    <path d="M24 24H40V40H24V24Z" fill="white" rx="4" />
+    <text x="32" y="36" textAnchor="middle" fill="#E65100" fontSize="10" fontFamily="monospace" fontWeight="bold">
+      H
+    </text>
+  </svg>
+);
+
+export const ZodLogo = (props: SVGProps<SVGSVGElement>) => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <defs>
+      <linearGradient id="zod-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#3E67B1" />
+        <stop offset="100%" stopColor="#5A8DEE" />
+      </linearGradient>
+    </defs>
+    <polygon points="32,8 56,32 32,56 8,32" fill="url(#zod-grad)" />
+    <text x="32" y="36" textAnchor="middle" fill="white" fontSize="14" fontFamily="monospace" fontWeight="bold">
+      Z
+    </text>
   </svg>
 );

@@ -1,62 +1,127 @@
-import { Security, AllInclusive, DeveloperMode, CloudDone, Rocket, Speed } from "@mui/icons-material";
-import { Box, Container, Grid, Typography } from "@mui/material";
-import { FeatureSpotlight } from "./FeatureSpotlight";
+import { Box, Container, Grid, Paper, Typography, useTheme } from "@mui/material";
+import { Security, CloudDone, Speed, Code, Api, Storage } from "@mui/icons-material";
+import { motion } from "framer-motion";
 
 const features = [
   {
-    icon: <Security />,
+    icon: <Security sx={{ fontSize: 40 }} />,
     title: "端到端类型安全",
-    description:
-      "从数据库 Schema 到前端组件，全程采用 TypeScript 和 Zod 校验，智能提示无处不在，彻底告别运行时类型错误。",
+    description: "从数据库到前端的完整 TypeScript 类型安全，减少运行时错误",
   },
   {
-    icon: <AllInclusive />,
-    title: "混合渲染模式",
-    description:
-      "集成了 Vite 的热更新（HMR）用于开发，同时支持生产环境下的服务器端渲染（SSR），兼顾开发效率与生产性能。",
+    icon: <CloudDone sx={{ fontSize: 40 }} />,
+    title: "Cloudflare 原生",
+    description: "完全基于 Cloudflare 生态，享受边缘计算的性能优势",
   },
   {
-    icon: <DeveloperMode />,
-    title: "极致开发体验",
-    description: "通过 Hono 的轻量级框架和 React 的现代生态，提供无与伦比的开发体验。代码简洁，逻辑清晰。",
+    icon: <Speed sx={{ fontSize: 40 }} />,
+    title: "极速开发体验",
+    description: "热重载、自动重启，现代化的开发工具链",
   },
   {
-    icon: <CloudDone />,
-    title: "生产级就绪",
-    description:
-      "基于 Cloudflare 全球网络构建，整合了 Pages, Workers 和 D1 数据库，提供高可用、低延迟的生产级部署方案。",
+    icon: <Code sx={{ fontSize: 40 }} />,
+    title: "现代化架构",
+    description: "使用最新的 Web 技术栈，遵循最佳实践",
   },
   {
-    icon: <Speed />,
-    title: "性能卓越",
-    description: "Hono 后端和优化的前端构建确保了应用的快速响应。无论是 API 还是页面加载，都力求极致性能。",
+    icon: <Api sx={{ fontSize: 40 }} />,
+    title: "自动 API 文档",
+    description: "集成 OpenAPI，自动生成交互式 API 文档",
   },
   {
-    icon: <Rocket />,
-    title: "一键部署",
-    description: "简化的构建和部署流程，只需一个命令即可将您的全栈应用部署到 Cloudflare 的边缘网络上，轻松便捷。",
+    icon: <Storage sx={{ fontSize: 40 }} />,
+    title: "无服务器数据库",
+    description: "使用 Cloudflare D1，无需管理数据库基础设施",
   },
 ];
 
 export const FeatureSection = () => {
+  const theme = useTheme();
+
   return (
-    <Box sx={{ py: 12, bgcolor: "rgba(128, 128, 128, 0.05)" }}>
+    <Box
+      component="section"
+      sx={{
+        py: { xs: 8, md: 12 },
+        backgroundColor: theme.palette.background.paper,
+      }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="h3" component="h2" fontWeight="bold" textAlign="center" gutterBottom>
-          模板核心特性
-        </Typography>
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          textAlign="center"
-          sx={{ mb: 8, maxWidth: "700px", mx: "auto" }}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ amount: 0.3 }}
         >
-          我们不仅仅是代码的搬运工，更是最佳实践的布道者。这个模板旨在提供一个优雅、健壮且高效的开发起点。
-        </Typography>
+          <Typography
+            variant="h3"
+            component="h2"
+            textAlign="center"
+            gutterBottom
+            sx={{
+              fontWeight: "bold",
+              mb: 2,
+              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            核心特性
+          </Typography>
+          <Typography
+            variant="h6"
+            textAlign="center"
+            color="text.secondary"
+            sx={{ mb: 8, maxWidth: "600px", mx: "auto" }}
+          >
+            为现代 Web 开发而设计的完整解决方案
+          </Typography>
+        </motion.div>
+
         <Grid container spacing={4}>
-          {features.map((feature) => (
-            <Grid item xs={12} md={6} lg={4} key={feature.title}>
-              <FeatureSpotlight icon={feature.icon} title={feature.title} description={feature.description} />
+          {features.map((feature, index) => (
+            <Grid item xs={12} md={6} lg={4} key={index}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <Paper
+                  sx={{
+                    p: 4,
+                    height: "100%",
+                    textAlign: "center",
+                    backgroundColor: theme.glass.background,
+                    backdropFilter: "blur(16px)",
+                    border: `1px solid ${theme.palette.divider}`,
+                    borderRadius: "16px",
+                    transition: "all 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "translateY(-8px)",
+                      boxShadow: `0 12px 32px ${theme.palette.primary.main}20`,
+                      borderColor: theme.palette.primary.light,
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      color: theme.palette.primary.main,
+                      mb: 2,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {feature.icon}
+                  </Box>
+                  <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" lineHeight={1.6}>
+                    {feature.description}
+                  </Typography>
+                </Paper>
+              </motion.div>
             </Grid>
           ))}
         </Grid>

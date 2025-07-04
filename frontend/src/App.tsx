@@ -61,7 +61,7 @@ function App() {
                 fontWeight: location.pathname === "/features" ? "bold" : "normal",
               }}
             >
-              应用示例
+              API 示例
             </Button>
 
             <ToggleThemeButton />

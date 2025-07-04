@@ -15,23 +15,23 @@ export const Footer = () => {
         <Divider sx={{ mb: 4 }} />
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} Nekro AI. All rights reserved.
+            © {new Date().getFullYear()} NekroEdge Template. Built with ❤️ using Cloudflare.
           </Typography>
           <Box sx={{ display: "flex", gap: 3 }}>
-            <Link href="https://nekro.ai" target="_blank" rel="noopener" variant="body2" color="text.secondary">
-              Nekro AI
-            </Link>
             <Link
-              href="https://community.nekro.ai"
+              href="https://github.com/KroMiose/nekro-edge-template"
               target="_blank"
               rel="noopener"
               variant="body2"
               color="text.secondary"
             >
-              Nekro Community
+              GitHub
             </Link>
-            <Link href="mailto:support@nekro.ai" variant="body2" color="text.secondary">
-              Contact Us
+            <Link href="https://edge.nekro.ai" target="_blank" rel="noopener" variant="body2" color="text.secondary">
+              Demo
+            </Link>
+            <Link href="https://cloudflare.com" target="_blank" rel="noopener" variant="body2" color="text.secondary">
+              Cloudflare
             </Link>
           </Box>
         </Box>
