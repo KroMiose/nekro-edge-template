@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Container, Toolbar, Typography, CssBaseline, useTheme } from "@mui/material";
-import { Link as RouterLink, Outlet, useLocation } from "react-router";
+import { Link as RouterLink, Outlet, useLocation } from "react-router-dom";
 import { Footer } from "./components/Footer";
 import { NekroEdgeLogo } from "./assets/logos";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
