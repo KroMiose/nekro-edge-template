@@ -26,4 +26,7 @@ export default defineConfig({
     manifest: true,
     ssr: "src/entry-server.tsx",
   },
+  ssr: {
+    noExternal: ["react-router-dom"],
+  },
 });
