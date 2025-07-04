@@ -15,8 +15,11 @@ const AppThemeContext = createContext<AppThemeContextType>({
 
 export const useAppTheme = () => useContext(AppThemeContext);
 
+const isBrowser = typeof window !== "undefined";
+
 export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
   const [themeMode, setThemeMode] = useState<PaletteMode>(() => {
+    if (!isBrowser) return "dark";
     try {
       const storedMode = localStorage.getItem("themeMode");
       if (storedMode) {
@@ -32,11 +35,13 @@ export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
   const toggleTheme = useCallback(() => {
     setThemeMode((prevMode: PaletteMode) => {
       const newMode = prevMode === "light" ? "dark" : "light";
-      try {
-        localStorage.setItem("themeMode", newMode);
-      } catch (error) {
-        // Handle potential errors if localStorage is not available
-        console.error("Failed to save theme mode to localStorage", error);
+      if (isBrowser) {
+        try {
+          localStorage.setItem("themeMode", newMode);
+        } catch (error) {
+          // Handle potential errors if localStorage is not available
+          console.error("Failed to save theme mode to localStorage", error);
+        }
       }
       return newMode;
     });
