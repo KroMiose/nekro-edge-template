@@ -10,19 +10,27 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "nekro-edge-db",
-      "database_id": "e6e150da-6a9a-4d77-94ad-2993b1a0c52a",
+      "database_name": "nekro-edge-db-local",
+      "database_id": "local",
       "migrations_dir": "drizzle"
     }
   ],
   "vars": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "development",
+    "VITE_PORT": "5173"
   },
   "env": {
-    "development": {
+    "production": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "nekro-edge-db",
+          "database_id": "e6e150da-6a9a-4d77-94ad-2993b1a0c52a",
+          "migrations_dir": "drizzle"
+        }
+      ],
       "vars": {
-        "NODE_ENV": "development",
-        "VITE_PORT": "5173"
+        "NODE_ENV": "production"
       }
     }
   }

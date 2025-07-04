@@ -62,9 +62,11 @@ app.get("*", async (c) => {
   // Production SSR
   try {
     // This is a dynamic import, so it will only be executed in production.
-    const { default: manifest } = await import("../../frontend/dist/manifest.json", {
+    // @ts-ignore
+    const { default: manifest } = await import("../../frontend/dist/.vite/manifest.json", {
       assert: { type: "json" },
     });
+    // @ts-ignore
     const { render } = await import("../../frontend/dist/server/entry-server.js");
 
     const rendered = await render({ url: c.req.url });
@@ -92,9 +94,10 @@ app.get("*", async (c) => {
     return c.html(template);
   } catch (e) {
     console.error("SSR failed:", e);
-    // Fallback to a simple client-side rendering shell if SSR fails.
+    // Fallback to a simple error page if SSR fails.
     return c.html(
-      '<!DOCTYPE html><html><head><title>NekroEdge</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><div id="root"></div><script type="module" src="/frontend/src/entry-client.tsx"></script></body></html>',
+      "<!DOCTYPE html><html><head><title>Render Error</title></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p></body></html>",
+      500,
     );
   }
 });
