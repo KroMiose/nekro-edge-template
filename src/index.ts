@@ -49,6 +49,24 @@ app.get(
   }),
 );
 
+// Serve robots.txt (dynamically generated)
+app.get("/robots.txt", async (c) => {
+  const { generateRobotsTxt } = await import("./utils/htmlTemplate");
+  return c.text(generateRobotsTxt(), 200, {
+    "Content-Type": "text/plain",
+    "Cache-Control": "public, max-age=86400", // Cache for 24 hours
+  });
+});
+
+// Serve sitemap.xml (dynamically generated)
+app.get("/sitemap.xml", async (c) => {
+  const { generateSitemapXml } = await import("./utils/htmlTemplate");
+  return c.text(generateSitemapXml(), 200, {
+    "Content-Type": "application/xml",
+    "Cache-Control": "public, max-age=86400", // Cache for 24 hours
+  });
+});
+
 // Serve frontend assets
 app.get("*", async (c) => {
   if (c.env.NODE_ENV === "development") {
@@ -104,23 +122,19 @@ app.get("*", async (c) => {
       throw new Error("Could not find a valid client entry in manifest.json");
     }
 
-    // This is a simplified template. In a real-world scenario, you'd likely
-    // use a more robust templating solution.
-    const template = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>NekroEdge</title>
-      <link rel="stylesheet" href="/${entry.css?.[0]}">
-    </head>
-    <body>
-      <div id="root">${rendered.html}</div>
-      <script type="module" src="/${entry.file}"></script>
-    </body>
-  </html>
-`;
+    // Use centralized HTML template generator
+    const { generateHtmlTemplate } = await import("./utils/htmlTemplate");
+
+    const cssFiles = entry.css ? entry.css.map((css: string) => `/${css}`) : [];
+    const jsFiles = [entry.file].map((js: string) => `/${js}`);
+
+    const template = generateHtmlTemplate({
+      path: url.pathname,
+      content: rendered.html,
+      cssFiles,
+      jsFiles,
+    });
+
     return c.html(template);
   } catch (e) {
     console.error("SSR failed:", e);

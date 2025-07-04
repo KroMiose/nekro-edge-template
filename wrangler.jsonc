@@ -35,7 +35,8 @@
         }
       ],
       "vars": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "VITE_PORT": "5173"
       }
     }
   }
