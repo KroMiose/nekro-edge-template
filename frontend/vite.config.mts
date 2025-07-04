@@ -22,6 +22,7 @@ export default defineConfig({
       "react-router-dom",
       "@mui/material",
       "@mui/system",
+      "@mui/icons-material",
       "@emotion/react",
       "@emotion/styled",
       "react-i18next",

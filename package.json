@@ -10,6 +10,7 @@
     "build:client": "vite build --config frontend/vite.config.mts",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir ../dist/server --config frontend/vite.config.mts",
     "deploy": "pnpm build && wrangler deploy --env production",
+    "serve:prod": "pnpm build && wrangler dev --env production",
     "test": "vitest",
     "cf-typegen": "wrangler types",
     "db:generate": "drizzle-kit generate",

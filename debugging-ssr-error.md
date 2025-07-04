@@ -89,13 +89,55 @@
   - 但 `wrangler deploy` 命令在"上传资源"阶段失败，错误为 `ENOENT: no such file or directory, scandir '/opt/buildhome/repo/frontend/dist'`。
   - **根本原因:** `wrangler.jsonc` 文件中的 `site.bucket` 属性，仍然指向一个旧的、不存在的路径 (`frontend/dist`)。我只修正了构建，却忘了修正部署。
 
+#### 尝试 #12: 部署配置最终修正
+
+- **操作:** 修正 `wrangler.jsonc` 文件中 `site.bucket` 的路径为 `./dist/client`。
+- **原因:** 使部署配置与新的构建产物目录保持一致。
+- **结果:** **部署失败。** 错误又回到了 `Could not find frontend entry in manifest.json`。这证明虽然构建和部署流程都已正确，但服务器在运行时读取 `manifest.json` 时仍然无法找到预期的入口。
+
 ---
 
-### 终极决战
+### 新的、绝对正确的策略: 本地复现，亲眼所见
 
-我们已经扫清了所有外围障碍。现在只剩下最后一步配置，就可以直面最终的渲染错误。
+我之前所有的云端调试都极其低效且充满不确定性。遵照您的指示，我们必须转为在本地复现生产环境。
 
-**下一步行动 (最后一步准备):**
+**核心原则:** 在本地启动一个与生产环境行为一致的服务，从而能快速、准确地调试运行时错误。
 
-1.  **修正 `wrangler.jsonc`:** 我将 `site.bucket` 的路径从 `"frontend/dist"` 修改为 `"./dist/client"`，以精确指向我们新的客户端静态资源目录。
-2.  **触发最终部署:** 在您确认修改后，重新部署，我们将最终看到最初的 `Element type is invalid` 错误。
+**下一步行动:**
+
+1.  **添加本地生产服务命令:** 我将在 `package.json` 中添加一个 `serve:prod` 命令。此命令会先执行 `pnpm build`，然后通过 `wrangler dev --env production` 在本地启动一个服务。这个服务会使用生产环境变量，并加载我们构建好的静态文件，从而**完美复现**生产环境下的运行时状态。
+2.  **打印 Manifest 内容:** 我将在 `src/index.ts` 中添加 `console.log`，以便在服务启动时，直接在终端打印出它实际读取到的 `manifest.json` 的内容。这将彻底终结所有猜测。
+3.  **本地调试:** 您只需运行 `pnpm serve:prod`，我们就能在本地看到错误，并根据打印出的 `manifest.json` 内容进行最终的、决定性的修正。
+
+#### 最终决战: 真相大白
+
+- **操作:** 运行 `pnpm serve:prod` 并在终端查看日志。
+- **原因:** 在本地复现生产错误，并打印出 `manifest.json` 的真实内容。
+- **结果:** **成功捕获到根本原因。**
+  - 终端日志清晰地打印出了 `manifest.json` 的内容。
+  - 内容显示，客户端构建的入口键是 `"index.html"`，而非我之前一直错误假设的 `"src/entry-client.tsx"`。
+  - **最终结论:** `src/index.ts` 中硬编码的错误键名，是导致 `Could not find frontend entry in manifest.json` 错误的唯一、直接原因。
+
+---
+
+**最终修正:**
+
+我将修改 `src/index.ts`，使用正确的键 `"index.html"` 来读取 `manifest.json`，从而一劳永逸地解决这个问题。
+
+#### 新的挑战: MIME 类型错误
+
+- **操作:** 运行 `pnpm serve:prod`，修正 `manifest.json` 键后，页面可以进行服务端渲染，但浏览器控制台报错。
+- **错误:**
+  - `Refused to apply style from '...' because its MIME type ('text/html') is not a supported stylesheet MIME type.`
+  - `Failed to load module script: ... responded with a MIME type of "text/html".`
+- **原因:** SSR 成功后，浏览器尝试加载 HTML 中引用的 CSS 和 JS 资源 (`/assets/...`)。但我们的 Hono 应用没有配置静态文件服务。所有未匹配到 API 路由的请求，包括对静态资源的请求，都被通配符路由 `app.get('*', ...)` 捕获，并错误地返回了 SSR 生成的 HTML 页面，导致了 MIME 类型不匹配。
+- **解决方案:**
+  1.  引入 Hono 官方为 Cloudflare Pages 设计的静态文件服务中间件 `@hono/static-site`。
+  2.  在 `src/index.ts` 中，将此中间件注册在 SSR 处理器**之前**。
+  3.  此中间件会拦截指向静态资源的请求并正确地提供文件服务。对于无法匹配为静态文件的请求（如页面路由 `/`），它会跳过并交由后续的 SSR 处理器处理。
+
+---
+
+**根治之路:**
+
+我将安装 `@hono/static-site` 并修改 `src/index.ts` 来最终解决静态资源服务的问题。

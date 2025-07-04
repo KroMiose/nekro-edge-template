@@ -70,15 +70,23 @@ app.get("*", async (c) => {
   try {
     // Note: These are dynamic imports, and will only be available after building the frontend.
     // @ts-ignore
-    const manifest = await import("../dist/client/.vite/manifest.json");
+    const manifestModule = await import("../dist/client/.vite/manifest.json");
     // @ts-ignore
     const { render } = await import("../dist/server/entry-server.mjs");
 
-    const rendered = await render(c.req.url);
-    const entry = (manifest as Record<string, any>)["src/entry-client.tsx"];
+    // The imported module may have the content under a `default` key.
+    const manifest = manifestModule.default || manifestModule;
+
+    const url = new URL(c.req.url);
+    const rendered = await render(url.pathname);
+
+    // The manifest key is the path to the entrypoint file relative to the
+    // Vite root. In our case, the client build entry is `index.html` (the
+    // default for Vite), so we use that as the key.
+    const entry = (manifest as Record<string, any>)["index.html"];
 
     if (!entry) {
-      throw new Error("Could not find frontend entry in manifest.json");
+      throw new Error("Could not find a valid client entry in manifest.json");
     }
 
     // This is a simplified template. In a real-world scenario, you'd likely
