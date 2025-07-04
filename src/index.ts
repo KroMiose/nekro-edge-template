@@ -66,16 +66,18 @@ app.get("*", async (c) => {
     });
   }
 
-  // Production: Handle static assets first
+  // Production: Use ASSETS binding to serve static files
   const url = new URL(c.req.url);
+
+  // Try to serve static assets first using ASSETS binding
   if (url.pathname.startsWith("/assets/")) {
     try {
-      // Use ASSETS Fetcher to serve static files
       const assetResponse = await c.env.ASSETS.fetch(c.req.raw);
-      return assetResponse;
+      if (assetResponse.status !== 404) {
+        return assetResponse;
+      }
     } catch (error) {
       console.error("Error serving static asset:", error);
-      return new Response("Asset not found", { status: 404 });
     }
   }
 
