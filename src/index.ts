@@ -116,7 +116,7 @@ app.get("*", async (c) => {
     }
 
     return c.html(
-      `<!DOCTYPE html><html><head><title>Render Error</title></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p><hr><pre>${detailedError}</pre></body></html>`,
+      `<!DOCTYPE html><html><head><title>Render Error</title><style>body{font-family:sans-serif;background:#111;color:#eee;}pre{background:#222;padding:1em;border-radius:8px;white-space:pre-wrap;word-wrap:break-word;}</style></head><body><h1>Server-side rendering failed.</h1><p>Please check the server logs for more details.</p><hr><pre>${detailedError}</pre></body></html>`,
       500,
     );
   }
