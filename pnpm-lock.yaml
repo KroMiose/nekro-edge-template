@@ -78,9 +78,6 @@ importers:
       '@hono/vite-cloudflare-pages':
         specifier: ^0.4.2
         version: 0.4.2(hono@4.4.0)
-      '@hono/vite-dev-server':
-        specifier: ^0.20.0
-        version: 0.20.0(hono@4.4.0)(miniflare@4.20250617.4)(wrangler@4.22.0(@cloudflare/workers-types@4.20250627.0))
       '@types/node':
         specifier: ^20.14.9
         version: 20.19.1
@@ -1316,12 +1313,6 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@hono/node-server@1.15.0':
-    resolution: {integrity: sha512-MjmK4l5N4dQpZ9OSWN0tCj7ejuc7WvuWMzSKtc89bnknJykAeHxzRigXBTYZk85H6Awrii6RM59iUiUluApu2A==}
-    engines: {node: '>=18.14.1'}
-    peerDependencies:
-      hono: ^4
-
   '@hono/swagger-ui@0.5.2':
     resolution: {integrity: sha512-7wxLKdb8h7JTdZ+K8DJNE3KXQMIpJejkBTQjrYlUWF28Z1PGOKw6kUykARe5NTfueIN37jbyG/sBYsbzXzG53A==}
     peerDependencies:
@@ -1332,19 +1323,6 @@ packages:
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: '*'
-
-  '@hono/vite-dev-server@0.20.0':
-    resolution: {integrity: sha512-Qkp9jh4R0q5VnUTBIoaeyh0M6nZWMWPaj5sHa0JJIS3Wu0UPi+Trc5JQTv0tKfYkrnAwOSQXW17pI1815o/5lQ==}
-    engines: {node: '>=18.14.1'}
-    peerDependencies:
-      hono: '*'
-      miniflare: '*'
-      wrangler: '*'
-    peerDependenciesMeta:
-      miniflare:
-        optional: true
-      wrangler:
-        optional: true
 
   '@hono/zod-openapi@0.18.0':
     resolution: {integrity: sha512-MNdFSbACkEq1txteKsBrVB0Mnil0zd5urOrP8eti6kUDI95CKVws+vjHQWNddRqmqlBHa5kFAcVXSInHFmcYGQ==}
@@ -4118,10 +4096,6 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@hono/node-server@1.15.0(hono@4.4.0)':
-    dependencies:
-      hono: 4.4.0
-
   '@hono/swagger-ui@0.5.2(hono@4.4.0)':
     dependencies:
       hono: 4.4.0
@@ -4129,15 +4103,6 @@ snapshots:
   '@hono/vite-cloudflare-pages@0.4.2(hono@4.4.0)':
     dependencies:
       hono: 4.4.0
-
-  '@hono/vite-dev-server@0.20.0(hono@4.4.0)(miniflare@4.20250617.4)(wrangler@4.22.0(@cloudflare/workers-types@4.20250627.0))':
-    dependencies:
-      '@hono/node-server': 1.15.0(hono@4.4.0)
-      hono: 4.4.0
-      minimatch: 9.0.5
-    optionalDependencies:
-      miniflare: 4.20250617.4
-      wrangler: 4.22.0(@cloudflare/workers-types@4.20250627.0)
 
   '@hono/zod-openapi@0.18.0(hono@4.4.0)(zod@3.25.67)':
     dependencies:

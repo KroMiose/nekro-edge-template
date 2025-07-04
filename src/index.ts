@@ -66,7 +66,20 @@ app.get("*", async (c) => {
     });
   }
 
-  // Production SSR
+  // Production: Handle static assets first
+  const url = new URL(c.req.url);
+  if (url.pathname.startsWith("/assets/")) {
+    try {
+      // Use ASSETS Fetcher to serve static files
+      const assetResponse = await c.env.ASSETS.fetch(c.req.raw);
+      return assetResponse;
+    } catch (error) {
+      console.error("Error serving static asset:", error);
+      return new Response("Asset not found", { status: 404 });
+    }
+  }
+
+  // Production SSR for pages
   try {
     // Note: These are dynamic imports, and will only be available after building the frontend.
     // @ts-ignore
