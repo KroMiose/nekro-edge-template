@@ -1,3 +1,12 @@
+// This file is the entry point for the server.
+//
+// It's responsible for exporting a Hono application that can be used as a
+// serverless function.
+//
+// The server-side rendering is handled by the `../frontend/src/entry-server.tsx`
+// file, which is imported here. The Vite plugin for Hono will handle bundling
+// this file and its dependencies.
+
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { swaggerUI } from "@hono/swagger-ui";
 import { secureHeaders } from "hono/secure-headers";
@@ -10,19 +19,20 @@ import { Bindings } from "./types";
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 
+// Middlewares
 app.use("*", etag(), secureHeaders(), logger());
 app.use(
   "/api/*",
   cors({
-    origin: "*",
+    origin: "*", // You may want to configure this more strictly for production
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   }),
 );
 
-// Register API routes
+// API routes
 app.route("/api", api);
 
-// Serve OpenAPI spec
+// OpenAPI Docs
 app.doc("/api/doc", {
   openapi: "3.1.0",
   info: {
@@ -39,10 +49,7 @@ app.get(
   }),
 );
 
-// Export app type for RPC client (before adding catch-all route)
-// export type AppType = typeof app; // This is now in api.ts
-
-// Serve frontend assets (this must come after API routes and type export)
+// Serve frontend assets
 app.get("*", async (c) => {
   if (c.env.NODE_ENV === "development") {
     const vitePort = c.env.VITE_PORT || "5173";
@@ -61,21 +68,21 @@ app.get("*", async (c) => {
 
   // Production SSR
   try {
-    // This is a dynamic import, so it will only be executed in production.
-    // The bundler automatically parses the JSON file, so we can use the default export directly.
+    // Note: These are dynamic imports, and will only be available after building the frontend.
     // @ts-ignore
-    const { default: manifest } = await import("../frontend/dist/.vite/manifest.json?raw");
-
+    const manifest = await import("../frontend/dist/.vite/manifest.json");
     // @ts-ignore
     const { render } = await import("../frontend/dist/server/entry-server.js");
 
     const rendered = await render({ url: c.req.url });
-    const entry = (manifest as unknown as Record<string, any>)["frontend/src/entry-client.tsx"];
+    const entry = (manifest as Record<string, any>)["frontend/src/entry-client.tsx"];
 
     if (!entry) {
       throw new Error("Could not find frontend entry in manifest.json");
     }
 
+    // This is a simplified template. In a real-world scenario, you'd likely
+    // use a more robust templating solution.
     const template = `
   <!DOCTYPE html>
   <html>
