@@ -40,7 +40,6 @@ export const TechCard = ({ name, description, icon, color }: TechCardProps) => {
             mb: 2,
             p: 2,
             borderRadius: "12px",
-            backgroundColor: "rgba(255,255,255,0.1)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

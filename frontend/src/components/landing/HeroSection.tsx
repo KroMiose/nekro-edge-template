@@ -1,4 +1,5 @@
-import { Box, Button, Container, Typography, useTheme } from "@mui/material";
+import { Box, Button, Container, Typography, useTheme, Chip } from "@mui/material";
+import { GitHub } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -45,21 +46,35 @@ export const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          <Typography
-            variant="h1"
-            component="h1"
-            sx={{
-              fontSize: { xs: "2.5rem", md: "4rem", lg: "5rem" },
-              fontWeight: "bold",
-              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              marginBottom: 3,
-              textAlign: "center",
-            }}
-          >
-            NekroEdge
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, marginBottom: 3 }}>
+            <Typography
+              variant="h1"
+              component="h1"
+              sx={{
+                fontSize: { xs: "2.5rem", md: "4rem", lg: "5rem" },
+                fontWeight: "bold",
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              NekroEdge
+            </Typography>
+            <Chip
+              label="Template"
+              size="small"
+              sx={{
+                fontSize: { xs: "0.75rem", md: "0.875rem" },
+                height: { xs: "24px", md: "32px" },
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}20, ${theme.palette.secondary.main}20)`,
+                border: `1px solid ${theme.palette.primary.main}40`,
+                color: theme.palette.primary.main,
+                fontWeight: "bold",
+                alignSelf: "flex-start",
+                marginTop: { xs: "0.5rem", md: "1rem" },
+              }}
+            />
+          </Box>
         </motion.div>
 
         <motion.div
@@ -134,6 +149,7 @@ export const HeroSection = () => {
               target="_blank"
               variant="outlined"
               size="large"
+              startIcon={<GitHub />}
               sx={{
                 px: 6,
                 py: 2,
@@ -149,7 +165,7 @@ export const HeroSection = () => {
                 transition: "all 0.3s ease",
               }}
             >
-              查看源码
+              GitHub
             </Button>
           </Box>
         </motion.div>
